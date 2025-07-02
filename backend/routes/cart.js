@@ -127,6 +127,21 @@ router.delete('/remove/:itemName', async (req, res) => {
   }
 });
 
+router.delete('/clear', async (req, res) => {
+    try {
+        const cart = await Cart.findOne({ userId: req.user.userId });
+        if (!cart) {
+            return res.status(404).json({ message: 'Cart not found' });
+        }
+
+        cart.items = [];
+        await cart.save();
+        res.status(200).json({ message: 'Cart cleared', items: cart.items });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to clear cart', error: error.message });
+    }
+});
+
 // Get cart
 router.get('/', async (req, res) => {
   try {

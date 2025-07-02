@@ -30,7 +30,7 @@ const Payment = ({ orderType, cartItems, subtotal, serviceCharge, total, onClose
         try {
             console.log('Sending to /create:', { orderType, subtotal, serviceCharge, total, isPreOrder, slot });
 
-            // Create the order in the backend
+            
             const res = await axios.post(
                 `${import.meta.env.VITE_BACKEND_URL}/api/orders/create`,
                 {
@@ -38,8 +38,8 @@ const Payment = ({ orderType, cartItems, subtotal, serviceCharge, total, onClose
                     subtotal,
                     serviceCharge,
                     total,
-                    isPreOrder: !!isPreOrder, // Ensure boolean
-                    slot: isPreOrder ? slot : '', // Send slot only for preorders
+                    isPreOrder: !!isPreOrder, 
+                    slot: isPreOrder ? slot : '', 
                 },
                 {
                     headers: {
@@ -67,7 +67,7 @@ const Payment = ({ orderType, cartItems, subtotal, serviceCharge, total, onClose
                 name: 'GGU Foodies',
                 description: 'Order Payment',
                 image: '/ggu_foodies.jpg',
-                order_id: razorpayOrderorderId,
+                order_id: razorpayOrder.id,
                 handler: async function (response) {
                     try {
                         console.log('Sending to /verify:', {
