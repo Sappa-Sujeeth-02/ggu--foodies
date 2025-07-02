@@ -32,7 +32,7 @@ const Payment = ({ orderType, cartItems, subtotal, serviceCharge, total, onClose
 
             // Create the order in the backend
             const res = await axios.post(
-                `/api/orders/create`,
+                `${import.meta.env.VITE_BACKEND_URL}/api/orders/create`,
                 {
                     orderType,
                     subtotal,
@@ -67,7 +67,7 @@ const Payment = ({ orderType, cartItems, subtotal, serviceCharge, total, onClose
                 name: 'GGU Foodies',
                 description: 'Order Payment',
                 image: '/ggu_foodies.jpg',
-                order_id: razorpayOrder.id,
+                order_id: razorpayOrderorderId,
                 handler: async function (response) {
                     try {
                         console.log('Sending to /verify:', {
@@ -79,7 +79,7 @@ const Payment = ({ orderType, cartItems, subtotal, serviceCharge, total, onClose
 
                         // Verify payment with the backend
                         const verifyRes = await axios.post(
-                            `/api/orders/verify`,
+                            `${import.meta.env.VITE_BACKEND_URL}/api/orders/verify`,
                             {
                                 razorpay_payment_id: response.razorpay_payment_id,
                                 razorpay_order_id: response.razorpay_order_id,

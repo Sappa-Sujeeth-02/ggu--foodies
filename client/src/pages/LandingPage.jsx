@@ -29,8 +29,8 @@ const LandingPage = () => {
     const fetchData = async () => {
         try {
             const [response, responseItems] = await Promise.all([
-                axios.get(`/api/restaurant/restaurants`),
-                axios.get(`/api/restaurant/all-food-items`),
+                axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/restaurant/restaurants`),
+                axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/restaurant/all-food-items`),
             ]);
 
             console.log('Restaurants Response:', response.data);
@@ -439,7 +439,6 @@ const LandingPage = () => {
                 </div>
             </section>
 
-
             <section className="py-20 bg-gradient-to-r from-primary-600 to-primary-700 text-white">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <motion.div
@@ -451,7 +450,7 @@ const LandingPage = () => {
                             Ready to Start Ordering?
                         </h2>
                         <p className="text-xl mb-8 text-blue-100">
-                            Join thousands of students who are three already enjoying the convenience of pre-ordering their meals.
+                            Join thousands of students who are already enjoying the convenience of pre-ordering their meals.
                         </p>
                         <Link
                             to="/signup"

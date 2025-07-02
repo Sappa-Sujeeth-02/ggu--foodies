@@ -25,7 +25,7 @@ const OrderSuccessPage = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`/api/orders`, {
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/orders`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             const orders = response.data;
@@ -39,7 +39,7 @@ const OrderSuccessPage = () => {
             if (!latestOrder.otp && latestOrder.status !== 'cancelled') {
                 const newOtp = Math.floor(1000 + Math.random() * 9000);
                 await axios.put(
-                    `/api/orders/${latestOrder.orderId}/update-otp`,
+                    `${import.meta.env.VITE_BACKEND_URL}/api/orders/${latestOrder.orderId}/update-otp`,
                     { otp: newOtp },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
@@ -62,7 +62,7 @@ const OrderSuccessPage = () => {
         const fetchUserData = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get(`/api/auth/profile`, {
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setUserData(response.data);
@@ -165,7 +165,7 @@ const OrderSuccessPage = () => {
     const handleCancel = async () => {
         try {
             await axios.post(
-                `/api/orders/${order.orderId}/cancel`,
+                `${import.meta.env.VITE_BACKEND_URL}/api/orders/${order.orderId}/cancel`,
                 {},
                 { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
             );
@@ -184,7 +184,7 @@ const OrderSuccessPage = () => {
         try {
             const token = localStorage.getItem('token');
             await axios.post(
-                `/api/food-items/ratings`,
+                `${import.meta.env.VITE_BACKEND_URL}/api/food-items/ratings`,
                 {
                     orderId: order.orderId,
                     ratings: Object.entries(ratings).map(([foodItemId, rating]) => ({ foodItemId, rating })),
@@ -250,22 +250,28 @@ const OrderSuccessPage = () => {
                         <h3 className="text-lg font-bold text-gray-800 mb-4">Order Status</h3>
                         <div className="flex justify-between items-center mb-6 w-full max-w-md relative">
                             <div className="absolute left-0 right-0 top-5 h-1 flex items-center justify-center">
-                                <div className={`h-1 w-full max-w-[calc(100%-80px)] ${isCancelled
-                                    ? 'bg-red-200'
-                                    : ['confirmed', 'preparing', 'ready', 'completed'].includes(order.status)
-                                        ? 'bg-green-200'
-                                        : 'bg-gray-200'
-                                    }`}></div>
+                                <div
+                                    className={`h-1 w-full max-w-[calc(100%-80px)] ${
+                                        isCancelled
+                                            ? 'bg-red-200'
+                                            : ['confirmed', 'preparing', 'ready', 'completed'].includes(order.status)
+                                              ? 'bg-green-200'
+                                              : 'bg-gray-200'
+                                    }`}
+                                ></div>
                             </div>
 
                             <div className="flex flex-col items-center z-10">
                                 <div
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center ${isCancelled
-                                        ? 'bg-red-100 text-red-600'
-                                        : ['pending', 'confirmed', 'preparing', 'ready', 'completed'].includes(order.status)
-                                            ? 'bg-green-100 text-green-600'
-                                            : 'bg-gray-100 text-gray-400'
-                                        }`}
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                        isCancelled
+                                            ? 'bg-red-100 text-red-600'
+                                            : ['pending', 'confirmed', 'preparing', 'ready', 'completed'].includes(
+                                                  order.status
+                                              )
+                                              ? 'bg-green-100 text-green-600'
+                                              : 'bg-gray-100 text-gray-400'
+                                    }`}
                                 >
                                     <span className="text-sm">1</span>
                                 </div>
@@ -274,12 +280,13 @@ const OrderSuccessPage = () => {
 
                             <div className="flex flex-col items-center z-10">
                                 <div
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center ${isCancelled
-                                        ? 'bg-red-100 text-red-600'
-                                        : ['confirmed', 'preparing', 'ready', 'completed'].includes(order.status)
-                                            ? 'bg-green-100 text-green-600'
-                                            : 'bg-gray-100 text-gray-400'
-                                        }`}
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                        isCancelled
+                                            ? 'bg-red-100 text-red-600'
+                                            : ['confirmed', 'preparing', 'ready', 'completed'].includes(order.status)
+                                              ? 'bg-green-100 text-green-600'
+                                              : 'bg-gray-100 text-gray-400'
+                                    }`}
                                 >
                                     <span className="text-sm">2</span>
                                 </div>
@@ -288,12 +295,13 @@ const OrderSuccessPage = () => {
 
                             <div className="flex flex-col items-center z-10">
                                 <div
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center ${isCancelled
-                                        ? 'bg-red-100 text-red-600'
-                                        : ['preparing', 'ready', 'completed'].includes(order.status)
-                                            ? 'bg-green-100 text-green-600'
-                                            : 'bg-gray-100 text-gray-400'
-                                        }`}
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                        isCancelled
+                                            ? 'bg-red-100 text-red-600'
+                                            : ['preparing', 'ready', 'completed'].includes(order.status)
+                                              ? 'bg-green-100 text-green-600'
+                                              : 'bg-gray-100 text-gray-400'
+                                    }`}
                                 >
                                     <span className="text-sm">3</span>
                                 </div>
@@ -302,12 +310,13 @@ const OrderSuccessPage = () => {
 
                             <div className="flex flex-col items-center z-10">
                                 <div
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center ${isCancelled
-                                        ? 'bg-red-100 text-red-600'
-                                        : ['ready', 'completed'].includes(order.status)
-                                            ? 'bg-green-100 text-green-600'
-                                            : 'bg-gray-100 text-gray-400'
-                                        }`}
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                        isCancelled
+                                            ? 'bg-red-100 text-red-600'
+                                            : ['ready', 'completed'].includes(order.status)
+                                              ? 'bg-green-100 text-green-600'
+                                              : 'bg-gray-100 text-gray-400'
+                                    }`}
                                 >
                                     <span className="text-sm">4</span>
                                 </div>
@@ -316,12 +325,13 @@ const OrderSuccessPage = () => {
 
                             <div className="flex flex-col items-center z-10">
                                 <div
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center ${isCancelled
-                                        ? 'bg-red-100 text-red-600'
-                                        : order.status === 'completed'
-                                            ? 'bg-green-100 text-green-600'
-                                            : 'bg-gray-100 text-gray-400'
-                                        }`}
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                        isCancelled
+                                            ? 'bg-red-100 text-red-600'
+                                            : order.status === 'completed'
+                                              ? 'bg-green-100 text-green-600'
+                                              : 'bg-gray-100 text-gray-400'
+                                    }`}
                                 >
                                     <span className="text-sm">5</span>
                                 </div>
@@ -343,9 +353,7 @@ const OrderSuccessPage = () => {
                             <div className="flex items-center justify-center space-x-2 bg-green-50 p-3 rounded-lg">
                                 <HiCheck className="w-5 h-5 text-green-600" />
                                 <span className="text-green-700 font-medium">
-                                    {order.isPreOrder
-                                        ? `Collect your order in slot ${order.slot}`
-                                        : 'Pickup your order'}
+                                    {order.isPreOrder ? `Collect your order in slot ${order.slot}` : 'Pickup your order'}
                                 </span>
                             </div>
                         ) : (
@@ -374,9 +382,7 @@ const OrderSuccessPage = () => {
 
                     {isCompleted && !order.hasRated && (
                         <div className="mb-8">
-                            <h3 className="text-lg font-bold text-gray-800 mb-4 text-center">
-                                Rate Your Food Items
-                            </h3>
+                            <h3 className="text-lg font-bold text-gray-800 mb-4 text-center">Rate Your Food Items</h3>
                             <div className="space-y-4">
                                 {order.items.map((item, index) => (
                                     <div
@@ -391,10 +397,9 @@ const OrderSuccessPage = () => {
                                             {[1, 2, 3, 4, 5].map((star) => (
                                                 <HiStar
                                                     key={star}
-                                                    className={`w-6 h-6 cursor-pointer ${ratings[item.foodItemId] >= star
-                                                        ? 'text-yellow-500'
-                                                        : 'text-gray-300'
-                                                        }`}
+                                                    className={`w-6 h-6 cursor-pointer ${
+                                                        ratings[item.foodItemId] >= star ? 'text-yellow-500' : 'text-gray-300'
+                                                    }`}
                                                     onClick={() => handleRatingChange(item.foodItemId, star)}
                                                 />
                                             ))}
@@ -405,16 +410,15 @@ const OrderSuccessPage = () => {
                             <button
                                 onClick={handleRatingSubmit}
                                 disabled={Object.keys(ratings).length !== order.items.length}
-                                className={`w-full mt-4 py-2 px-4 rounded-lg font-medium transition-colors ${Object.keys(ratings).length === order.items.length
-                                    ? 'bg-red-600 text-white hover:bg-red-700'
-                                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                    }`}
+                                className={`w-full mt-4 py-2 px-4 rounded-lg font-medium transition-colors ${
+                                    Object.keys(ratings).length === order.items.length
+                                        ? 'bg-red-600 text-white hover:bg-red-700'
+                                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                }`}
                             >
                                 Submit Ratings
                             </button>
-                            <p className="text-center text-sm text-gray-600 mt-2">
-                                Your feedback helps us improve!
-                            </p>
+                            <p className="text-center text-sm text-gray-600 mt-2">Your feedback helps us improve!</p>
                         </div>
                     )}
 
@@ -429,9 +433,7 @@ const OrderSuccessPage = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
                             <div>
                                 <p className="text-sm text-gray-600 font-medium">Order Type</p>
-                                <p className="font-semibold capitalize text-gray-800">
-                                    {order.isPreOrder ? 'Preorder' : 'Instant'}
-                                </p>
+                                <p className="font-semibold capitalize text-gray-800">{order.isPreOrder ? 'Preorder' : 'Instant'}</p>
                             </div>
                             <div>
                                 <p className="text-sm text-gray-600 font-medium">Dining Type</p>
@@ -447,9 +449,7 @@ const OrderSuccessPage = () => {
                             </div>
                             <div>
                                 <p className="text-sm text-gray-600 font-medium">Food Court</p>
-                                <p className="font-semibold text-gray-800">
-                                    {order.restaurantid?.restaurantname || 'N/A'}
-                                </p>
+                                <p className="font-semibold text-gray-800">{order.restaurantid?.restaurantname || 'N/A'}</p>
                             </div>
                             <div>
                                 <p className="text-sm text-gray-600 font-medium">Total Amount</p>
@@ -468,10 +468,7 @@ const OrderSuccessPage = () => {
                         <h3 className="text-lg font-bold text-gray-800 mb-4">Items</h3>
                         <div className="space-y-4">
                             {order.items.map((item, index) => (
-                                <div
-                                    key={index}
-                                    className="flex justify-between items-center bg-gray-50 p-3 rounded-lg"
-                                >
+                                <div key={index} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
                                     <div>
                                         <p className="font-semibold text-gray-800">{item.name}</p>
                                         <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>

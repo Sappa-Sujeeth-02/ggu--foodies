@@ -25,7 +25,7 @@ const Profile = () => {
     const fetchUserProfile = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`/api/auth/profile`, {
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setUserData(response.data);
@@ -60,7 +60,7 @@ const Profile = () => {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.put(
-                `/api/auth/profile`,
+                `${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`,
                 editedUser,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -231,7 +231,6 @@ const Profile = () => {
                     </AnimatePresence>
                 </div>
             </nav>
-
 
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="flex items-center space-x-2 mb-6">

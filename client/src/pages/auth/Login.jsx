@@ -43,7 +43,7 @@ const Login = () => {
         setIsLoading(true);
 
         try {
-            const response = await axios.post(`/api/auth/login`, formData);
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, formData);
             toast.success(response.data.message);
             login(response.data.token);
             const { from, selectedCourt } = location.state || {};
@@ -153,7 +153,6 @@ const Login = () => {
                     </div>
 
                     <div className="flex items-center justify-between">
-
                         <div className="text-sm">
                             <Link
                                 to="/forgot-password"

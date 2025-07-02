@@ -93,8 +93,8 @@ const FoodCourtsPage = () => {
     const fetchData = async () => {
         try {
             const [response, responseItems] = await Promise.all([
-                axios.get(`/api/restaurant/restaurants`),
-                axios.get(`/api/restaurant/all-food-items`),
+                axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/restaurant/restaurants`),
+                axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/restaurant/all-food-items`),
             ]);
             if (response.data.success) {
                 const updatedRestaurants = processFoodCourts(response.data.restaurants);
@@ -140,7 +140,7 @@ const FoodCourtsPage = () => {
         const fetchUserProfile = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get(`/api/auth/profile`, {
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setUserName(response.data.name);
@@ -235,7 +235,7 @@ const FoodCourtsPage = () => {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.post(
-                `/api/cart/add`,
+                `${import.meta.env.VITE_BACKEND_URL}/api/cart/add`,
                 {
                     foodItemId: item._id,
                     quantity: 1,
@@ -255,9 +255,9 @@ const FoodCourtsPage = () => {
         if (newItemToAdd) {
             try {
                 const token = localStorage.getItem('token');
-                await axios.delete(`/api/cart/clear`, { headers: { Authorization: `Bearer ${token}` } });
+                await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/cart/clear`, { headers: { Authorization: `Bearer ${token}` } });
                 const response = await axios.post(
-                    `/api/cart/add`,
+                    `${import.meta.env.VITE_BACKEND_URL}/api/cart/add`,
                     {
                         foodItemId: newItemToAdd._id,
                         quantity: 1,

@@ -97,7 +97,7 @@ const SearchPage = () => {
     const fetchUserProfile = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`/api/auth/profile`, {
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setUserName(response.data.name);
@@ -109,8 +109,8 @@ const SearchPage = () => {
     const fetchData = async () => {
         try {
             const [response, responseItems] = await Promise.all([
-                axios.get(`/api/restaurant/restaurants`),
-                axios.get(`/api/restaurant/all-food-items`),
+                axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/restaurant/restaurants`),
+                axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/restaurant/all-food-items`),
             ]);
 
             if (response.data.success) {
@@ -353,7 +353,7 @@ const SearchPage = () => {
                 }
             }
             const response = await axios.post(
-                `/api/cart/add`,
+                `${import.meta.env.VITE_BACKEND_URL}/api/cart/add`,
                 { foodItemId: item._id, quantity: 1 },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -369,9 +369,9 @@ const SearchPage = () => {
         if (newItemToAdd) {
             try {
                 const token = localStorage.getItem('token');
-                await axios.delete(`/api/cart/clear`, { headers: { Authorization: `Bearer ${token}` } });
+                await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/cart/clear`, { headers: { Authorization: `Bearer ${token}` } });
                 const response = await axios.post(
-                    `/api/cart/add`,
+                    `${import.meta.env.VITE_BACKEND_URL}/api/cart/add`,
                     { foodItemId: newItemToAdd._id, quantity: 1 },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
@@ -789,9 +789,7 @@ const SearchPage = () => {
                                                     />
                                                     <div className="absolute top-2 right-2 flex items-center space-x-1 bg-black bg-opacity-50 px-2 py-1 rounded-lg">
                                                         <HiStar className="w-4 h-4 text-yellow-500" />
-                                                        <span className="text-xs font-medium text-white">
-                                                            {item.rating ? item.rating : 'N/A'}
-                                                        </span>
+                                                        <span className="text-xs font-medium text-white">{item.rating || 'N/A'}</span>
                                                     </div>
                                                 </div>
                                             </motion.div>

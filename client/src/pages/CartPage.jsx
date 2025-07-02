@@ -38,7 +38,7 @@ const CartPage = () => {
       setIsLoading(true);
       try {
         const token = localStorage.getItem('token');
-        const foodResponse = await axios.get(`/api/restaurant/all-food-items`, {
+        const foodResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/restaurant/all-food-items`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (foodResponse.data.success) {
@@ -47,7 +47,7 @@ const CartPage = () => {
           throw new Error('Failed to fetch food items');
         }
 
-        const cartResponse = await axios.get(`/api/cart`, {
+        const cartResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/cart`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const cart = cartResponse.data;
@@ -70,7 +70,7 @@ const CartPage = () => {
 
           const firstItemRestaurant = cart.items[0]?.restaurant;
           if (firstItemRestaurant) {
-            const restaurantResponse = await axios.get(`/api/restaurant/restaurants`, {
+            const restaurantResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/restaurant/restaurants`, {
               headers: { Authorization: `Bearer ${token}` },
             });
             const restaurant = restaurantResponse.data.restaurants.find(
@@ -120,7 +120,7 @@ const CartPage = () => {
       if (!isMounted) return;
       try {
         const token = localStorage.getItem('token');
-        const cartResponse = await axios.get(`/api/cart`, {
+        const cartResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/cart`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const cart = cartResponse.data;
@@ -149,7 +149,7 @@ const CartPage = () => {
         }
 
         if (orderMode === 'preorder' && restaurantId && preOrderEnabled) {
-          const restaurantResponse = await axios.get(`/api/restaurant/restaurants`, {
+          const restaurantResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/restaurant/restaurants`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           const restaurant = restaurantResponse.data.restaurants.find(
@@ -189,7 +189,7 @@ const CartPage = () => {
       setIsLoading(true);
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `/api/cart/update/${encodeURIComponent(itemName)}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/cart/update/${encodeURIComponent(itemName)}`,
         { quantity: newQuantity },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -211,7 +211,7 @@ const CartPage = () => {
       setIsLoading(true);
       const token = localStorage.getItem('token');
       const response = await axios.delete(
-        `/api/cart/remove/${encodeURIComponent(itemName)}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/cart/remove/${encodeURIComponent(itemName)}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log('Remove Item Response:', response.data);
@@ -259,7 +259,7 @@ const CartPage = () => {
     try {
       setIsLoading(true);
       const token = localStorage.getItem('token');
-      const cartResponse = await axios.get(`/api/cart`, {
+      const cartResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/cart`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const cart = cartResponse.data;

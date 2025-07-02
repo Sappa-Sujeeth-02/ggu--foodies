@@ -59,7 +59,7 @@ const ForgotPassword = () => {
                 throw new Error('Both email and phone are required');
             }
 
-            const response = await axios.post(`/api/otp/generate-otp`, {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/otp/generate-otp`, {
                 email,
                 phone,
                 method: 'email' // Default to email for forgot password
@@ -78,7 +78,7 @@ const ForgotPassword = () => {
 
         try {
             const { email, phone } = formData;
-            const response = await axios.post(`/api/otp/generate-otp`, {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/otp/generate-otp`, {
                 email,
                 phone,
                 method: 'email'
@@ -96,7 +96,7 @@ const ForgotPassword = () => {
         setIsLoading(true);
 
         try {
-            const response = await axios.post(`/api/otp/verify-otp`, {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/otp/verify-otp`, {
                 identifier: formData.email,
                 otp: formData.otp
             });
@@ -126,7 +126,7 @@ const ForgotPassword = () => {
         }
 
         try {
-            const response = await axios.post(`/api/auth/reset-password`, {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/reset-password`, {
                 email: formData.email,
                 phone: formData.phone,
                 newPassword: formData.newPassword

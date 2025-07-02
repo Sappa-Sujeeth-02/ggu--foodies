@@ -24,7 +24,7 @@ const Contact = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('/api/contact/send-message', {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/contact/send-message`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

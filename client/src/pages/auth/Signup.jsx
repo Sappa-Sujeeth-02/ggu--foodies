@@ -169,7 +169,7 @@ const Signup = () => {
 
             // Check if email or phone already exists
             try {
-                const checkResponse = await axios.post(`/api/auth/check-user`, {
+                const checkResponse = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/check-user`, {
                     email,
                     phone
                 });
@@ -196,7 +196,7 @@ const Signup = () => {
             // Generate OTP
             const method = email ? 'email' : 'phone';
             const identifier = email || phone;
-            const response = await axios.post(`/api/otp/generate-otp`, {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/otp/generate-otp`, {
                 email,
                 phone,
                 method
@@ -218,7 +218,7 @@ const Signup = () => {
             const { email, phone } = formData;
             const method = email ? 'email' : 'phone';
             const identifier = email || phone;
-            await axios.post(`/api/otp/generate-otp`, {
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/otp/generate-otp`, {
                 email,
                 phone,
                 method
@@ -237,11 +237,11 @@ const Signup = () => {
 
         try {
             // Verify OTP
-            const otpResponse = await axios.post(`/api/otp/verify-otp`, otpData);
+            const otpResponse = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/otp/verify-otp`, otpData);
             toast.success(otpResponse.data.message);
 
             // Create account
-            const signupResponse = await axios.post(`/api/auth/signup`, formData);
+            const signupResponse = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, formData);
             toast.success('Account created successfully! Redirecting to login...');
             login(signupResponse.data.token);
 
