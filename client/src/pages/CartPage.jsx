@@ -176,7 +176,7 @@ const CartPage = () => {
           toast.error(error.response?.data?.message || 'Failed to update cart. Please refresh the page.');
         }
       }
-    }, 10000);
+    }, 3000);
 
     return () => {
       isMounted = false;
