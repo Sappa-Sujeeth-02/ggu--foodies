@@ -7,16 +7,17 @@ import { HiStar, HiClock, HiShoppingBag } from 'react-icons/hi';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import LoadingPage from './LoadingPage'; // Import the LoadingPage component
 
 const LandingPage = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true); // Existing loading state
     const navigate = useNavigate();
     const { isLoggedIn } = useContext(AuthContext);
     const [foodCourts, setFoodCourts] = useState([]);
     const [popularItems, setPopularItems] = useState([]);
     const [fetchError, setFetchError] = useState('');
-    const [averageRating, setAverageRating] = useState(0); // New state for average rating
+    const [averageRating, setAverageRating] = useState(0); // State for average rating
     const scrollRef = useRef(null);
     const [scrollDirection, setScrollDirection] = useState('right');
 
@@ -142,12 +143,9 @@ const LandingPage = () => {
         }
     };
 
+    // Render LoadingPage when loading is true
     if (loading) {
-        return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
-            </div>
-        );
+        return <LoadingPage />;
     }
 
     return (
@@ -175,13 +173,7 @@ const LandingPage = () => {
                                     Get Started
                                 </Link>
                                 <button
-                                    onClick={() => {
-                                        if (isLoggedIn) {
-                                            navigate('/home');
-                                        } else {
-                                            navigate('/login', { state: { from: '/home' } });
-                                        }
-                                    }}
+                                    onClick={handleExploreFoodCourts}
                                     className="px-6 py-2 border-2 border-white text-white rounded-lg font-medium hover:bg-white hover:text-primary-600 transition-colors duration-200 text-center"
                                 >
                                     Explore Food Courts

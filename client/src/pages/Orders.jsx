@@ -8,7 +8,7 @@ import LoadingPage from './LoadingPage'; // Adjust path as needed
 
 const Orders = () => {
     const { isLoggedIn } = useContext(AuthContext);
-    const [orders, setOrders] = useState([]);
+    const [orders, setOrders] = useState([]); // Ensure orders is always an array
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('pending');
     const navigate = useNavigate();
@@ -17,19 +17,35 @@ const Orders = () => {
     const fetchOrders = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`/api/orders`, {
+            if (!token || !isLoggedIn) {
+                throw new Error('No valid authentication token found');
+            }
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/orders`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            setOrders(response.data);
+            // Ensure response.data is an array; fallback to empty array if not
+            const fetchedOrders = Array.isArray(response.data) ? response.data : [];
+            setOrders(fetchedOrders);
         } catch (error) {
             console.error('Fetch Orders Error:', error);
-            toast.error('Failed to fetch orders');
+            if (error.response?.status === 401 || error.message === 'No valid authentication token found') {
+                toast.error('Session expired. Please log in again.');
+                localStorage.removeItem('token');
+                navigate('/login');
+            } else {
+                toast.error('Failed to fetch orders');
+            }
+            setOrders([]); // Fallback to empty array on error
         }
     };
 
     // Initial load
     useEffect(() => {
-        if (!isLoggedIn) return;
+        if (!isLoggedIn) {
+            setLoading(false); // Clear loading if not logged in
+            navigate('/login'); // Redirect to login if not logged in
+            return;
+        }
 
         const loadOrders = async () => {
             try {
@@ -43,23 +59,20 @@ const Orders = () => {
             }
         };
         loadOrders();
-    }, [isLoggedIn]);
+    }, [isLoggedIn, navigate]);
 
     // Polling without affecting loading state
     useEffect(() => {
         if (!isLoggedIn || isInitialLoad) return;
 
-        const pollOrders = async () => {
-            const interval = setInterval(async () => {
-                try {
-                    await fetchOrders();
-                } catch (error) {
-                    console.error('Polling error:', error);
-                }
-            }, 5000);
-            return () => clearInterval(interval);
-        };
-        pollOrders();
+        const interval = setInterval(async () => {
+            try {
+                await fetchOrders();
+            } catch (error) {
+                console.error('Polling error:', error);
+            }
+        }, 5000);
+        return () => clearInterval(interval); // Cleanup on unmount or when isLoggedIn/isInitialLoad changes
     }, [isLoggedIn, isInitialLoad]);
 
     const formatDate = (dateString) => {
@@ -75,7 +88,10 @@ const Orders = () => {
         e.stopPropagation();
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`/api/orders/${orderId}/cancel`, {}, {
+            if (!token || !isLoggedIn) {
+                throw new Error('No valid authentication token found');
+            }
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/orders/${orderId}/cancel`, {}, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -87,7 +103,13 @@ const Orders = () => {
             toast.success('Order cancelled successfully');
         } catch (error) {
             console.error('Cancel Order Error:', error);
-            toast.error(error.response?.data.message || 'Failed to cancel order');
+            if (error.response?.status === 401 || error.message === 'No valid authentication token found') {
+                toast.error('Session expired. Please log in again.');
+                localStorage.removeItem('token');
+                navigate('/login');
+            } else {
+                toast.error(error.response?.data.message || 'Failed to cancel order');
+            }
         }
     };
 
@@ -127,7 +149,7 @@ const Orders = () => {
     }
 
     if (loading) {
-        return <LoadingPage />; // Use the separate LoadingPage component
+        return <LoadingPage />;
     }
 
     if (orders.length === 0) {

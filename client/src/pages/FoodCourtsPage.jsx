@@ -20,6 +20,7 @@ import {
 } from 'react-icons/hi';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
+import LoadingPage from './LoadingPage'; // Adjust path as needed
 
 const FoodCourtsPage = () => {
     const navigate = useNavigate();
@@ -43,6 +44,7 @@ const FoodCourtsPage = () => {
     const [popupType, setPopupType] = useState('success');
     const [isReplacePopupOpen, setIsReplacePopupOpen] = useState(false);
     const [newItemToAdd, setNewItemToAdd] = useState(null);
+    const [initialLoading, setInitialLoading] = useState(true); // New state for initial loading
     const errorMessageRef = useRef(null);
     const foodItemRefs = useRef({});
     const topRef = useRef(null);
@@ -90,7 +92,10 @@ const FoodCourtsPage = () => {
         setCategories(uniqueCategories);
     };
 
-    const fetchData = async () => {
+    const fetchData = async (isInitialFetch = false) => {
+        if (isInitialFetch) {
+            setInitialLoading(true); // Set loading only for initial fetch
+        }
         try {
             const [response, responseItems] = await Promise.all([
                 axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/restaurant/restaurants`),
@@ -120,6 +125,10 @@ const FoodCourtsPage = () => {
             console.error('Failed to fetch data:', error);
             setFetchError('Failed to load food courts or items. Please try again later.');
             showPopup('Failed to load food courts or items', 'error');
+        } finally {
+            if (isInitialFetch) {
+                setInitialLoading(false); // Clear loading only for initial fetch
+            }
         }
     };
 
@@ -131,8 +140,10 @@ const FoodCourtsPage = () => {
     };
 
     useEffect(() => {
-        fetchData();
-        const interval = setInterval(fetchData, 5000);
+        // Initial fetch
+        fetchData(true);
+        // Polling every 5 seconds without setting loading state
+        const interval = setInterval(() => fetchData(false), 5000);
         return () => clearInterval(interval);
     }, [selectedFoodCourt]);
 
@@ -147,6 +158,8 @@ const FoodCourtsPage = () => {
             } catch (error) {
                 console.error('Failed to fetch user profile:', error);
                 showPopup('Failed to fetch user profile', 'error');
+            } finally {
+                setInitialLoading(false); // Clear loading after profile fetch
             }
         };
         fetchUserProfile();
@@ -309,6 +322,10 @@ const FoodCourtsPage = () => {
             (selectedCategory === 'All Categories' || item.category === selectedCategory)
         )
         : [];
+
+    if (initialLoading) {
+        return <LoadingPage />;
+    }
 
     return (
         <div className="min-h-screen bg-white relative pb-16 md:pb-0">
