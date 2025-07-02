@@ -32,7 +32,7 @@ const Payment = ({ orderType, cartItems, subtotal, serviceCharge, total, onClose
 
             // Create the order in the backend
             const res = await axios.post(
-                `http://localhost:5000/api/orders/create`,
+                `/api/orders/create`,
                 {
                     orderType,
                     subtotal,
@@ -79,7 +79,7 @@ const Payment = ({ orderType, cartItems, subtotal, serviceCharge, total, onClose
 
                         // Verify payment with the backend
                         const verifyRes = await axios.post(
-                            `http://localhost:5000/api/orders/verify`,
+                            `/api/orders/verify`,
                             {
                                 razorpay_payment_id: response.razorpay_payment_id,
                                 razorpay_order_id: response.razorpay_order_id,

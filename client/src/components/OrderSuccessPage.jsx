@@ -25,7 +25,7 @@ const OrderSuccessPage = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`http://localhost:5000/api/orders`, {
+            const response = await axios.get(`/api/orders`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             const orders = response.data;
@@ -39,7 +39,7 @@ const OrderSuccessPage = () => {
             if (!latestOrder.otp && latestOrder.status !== 'cancelled') {
                 const newOtp = Math.floor(1000 + Math.random() * 9000);
                 await axios.put(
-                    `http://localhost:5000/api/orders/${latestOrder.orderId}/update-otp`,
+                    `/api/orders/${latestOrder.orderId}/update-otp`,
                     { otp: newOtp },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
@@ -62,7 +62,7 @@ const OrderSuccessPage = () => {
         const fetchUserData = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get(`http://localhost:5000/api/auth/profile`, {
+                const response = await axios.get(`/api/auth/profile`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setUserData(response.data);
@@ -165,7 +165,7 @@ const OrderSuccessPage = () => {
     const handleCancel = async () => {
         try {
             await axios.post(
-                `http://localhost:5000/api/orders/${order.orderId}/cancel`,
+                `/api/orders/${order.orderId}/cancel`,
                 {},
                 { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
             );
@@ -184,7 +184,7 @@ const OrderSuccessPage = () => {
         try {
             const token = localStorage.getItem('token');
             await axios.post(
-                `http://localhost:5000/api/food-items/ratings`,
+                `/api/food-items/ratings`,
                 {
                     orderId: order.orderId,
                     ratings: Object.entries(ratings).map(([foodItemId, rating]) => ({ foodItemId, rating })),

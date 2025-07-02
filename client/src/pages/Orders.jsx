@@ -17,7 +17,7 @@ const Orders = () => {
     const fetchOrders = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`http://localhost:5000/api/orders`, {
+            const response = await axios.get(`/api/orders`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setOrders(response.data);
@@ -75,7 +75,7 @@ const Orders = () => {
         e.stopPropagation();
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:5000/api/orders/${orderId}/cancel`, {}, {
+            await axios.post(`/api/orders/${orderId}/cancel`, {}, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
